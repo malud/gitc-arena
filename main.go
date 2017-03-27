@@ -20,6 +20,11 @@ const (
 	W                             = 16000
 	H                             = 6500
 	Min_Production_Rate           = 4
+	MinFactory                    = 7
+	MaxFactory                    = 15 //15
+	MinUnit                       = 15
+	MaxUnit                       = 30
+	MaxRound                      = 400 // 400
 	MOVE                          = moveType(0)
 	BOMB                          = moveType(1)
 	INCREASE                      = moveType(2)
@@ -117,8 +122,8 @@ func PlayRound(ai []*AI) int {
 	if playerSwap {
 		// TODO swap ai
 	}
-	state := State{}
-	rndFactoryCount := generator(7, 15)
+	state := &State{}
+	rndFactoryCount := generator(MinFactory, MaxFactory)
 	if rndFactoryCount%2 == 0 { // must be odd
 		rndFactoryCount++
 	}
@@ -134,14 +139,14 @@ func PlayRound(ai []*AI) int {
 	state.F[0] = Factory{0, 0, 0, 0, Vec{W / 2, H / 2}, []int{}}
 
 	// random distribution
-	xDistrib := UniformIntDistribution{(0), (W/2 - 2*factoryRadius)}
-	yDistrib := UniformIntDistribution{(0), (H - 2*factoryRadius)}
-	productionDistrib := UniformIntDistribution{(0), (3)}
-	initialUnitsDistrib := UniformIntDistribution{(15), (30)}
+	xDistrib := UniformIntDistribution{0, (W/2 - 2*factoryRadius)}
+	yDistrib := UniformIntDistribution{0, (H - 2*factoryRadius)}
+	productionDistrib := UniformIntDistribution{0, 3}
+	initialUnitsDistrib := UniformIntDistribution{MinUnit, MaxUnit}
 
 	for i := 1; i < len(state.F); i += 2 {
 		var r Vec
-		for !ValidSpawn(r, &state, i, minSpaceBetweenFactories) {
+		for !ValidSpawn(r, state, i, minSpaceBetweenFactories) {
 			r = Vec{xDistrib.Gen() + factoryRadius + extra_space_between_factories, yDistrib.Gen() + factoryRadius + extra_space_between_factories}
 		}
 		prod := productionDistrib.Gen()
@@ -177,8 +182,7 @@ func PlayRound(ai []*AI) int {
 		}
 	}
 	state.N_Bombs = []int{2, 2}
-	//println("PlayGame")
-	winner := Play_Game(ai, &state)
+	winner := Play_Game(ai, state)
 	if playerSwap {
 		if winner == -1 {
 			return -1
@@ -204,8 +208,7 @@ func Play_Game(ai []*AI, state *State) int {
 		ai[i].Feed_Inputs(ss)
 	}
 	state.entityId = 0
-	for turn := 1; turn <= 400; turn++ {
-		//println("Turn:", turn)
+	for turn := 1; turn <= MaxRound; turn++ {
 		M := []string{"WAIT", "WAIT"}
 		for i := 0; i < N; i++ {
 			if ai[i].Alive() {
@@ -237,7 +240,7 @@ func Play_Game(ai []*AI, state *State) int {
 				M[i] = GetMove(ai[i], turn)
 			}
 		}
-		for i := 0; i < 2; i++ {
+		for i := 0; i < N; i++ {
 			Play_Move(state, ai[i], M[i])
 		}
 		Simulate(state)

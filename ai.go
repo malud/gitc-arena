@@ -58,6 +58,7 @@ func NewAI() *AI {
 }
 
 func (a *AI) Feed_Inputs(b *bytes.Buffer) {
+	//fmt.Fprintf(os.Stderr, ">> Writing:\n%s", b.String())
 	_, err := io.Copy(a.inPipe, b)
 	if err != nil {
 		println("Err:", err.Error())
