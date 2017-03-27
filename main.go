@@ -194,7 +194,7 @@ func PlayRound(ai []*AI) int {
 func Play_Game(ai []*AI, state *State) int {
 	for i := 0; i < N; i++ {
 		ss := &bytes.Buffer{}
-		fmt.Fprintf(ss, "%d %d\n", len(state.F), len(state.F)*len(state.F)-1/2)
+		fmt.Fprintf(ss, "%d %d\n", len(state.F), len(state.F)*len(state.F-1)/2)
 		for j := 0; j < len(state.F); j++ {
 			for k := j + 1; k < len(state.F); k++ {
 				fmt.Fprintf(ss, "%d %d %d\n", j, k, state.F[j].l[k])
