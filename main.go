@@ -92,8 +92,6 @@ func main() {
 	aiOne := NewAI()
 	aiTwo := NewAI()
 
-	time.Sleep(100 * time.Millisecond) // wait some time
-
 	for {
 		PlayRound([]*AI{aiOne, aiTwo})
 	}
