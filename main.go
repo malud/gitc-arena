@@ -219,10 +219,10 @@ func Play_Game(ai []*AI, state *State) int {
 				ss := &bytes.Buffer{}
 				fmt.Fprintf(ss, "%d %d %d\n", len(state.F), len(state.T), len(state.B))
 				for j := 0; j < len(state.F); j++ {
-					fmt.Fprintf(ss, "%d FACTORY %d %d %d %d\n", color*state.F[j].owner, state.F[j].units, state.F[j].prod, state.F[j].turns, 0)
+					fmt.Fprintf(ss, "%d FACTORY %d %d %d %d %d\n", j, color*state.F[j].owner, state.F[j].units, state.F[j].prod, state.F[j].turns, 0)
 				}
 				for j := 0; j < len(state.T); j++ {
-					fmt.Fprintf(ss, "%d TROOP %d %d %d %d\n", color*state.T[j].owner, state.T[j].source, state.T[j].target, state.T[j].units, state.T[j].turns)
+					fmt.Fprintf(ss, "%d TROOP %d %d %d %d %d\n", j, color*state.T[j].owner, state.T[j].source, state.T[j].target, state.T[j].units, state.T[j].turns)
 				}
 				//for (const auto &it:S.B){
 				//const bomb &b{it.second};
