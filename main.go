@@ -194,9 +194,10 @@ func PlayRound(ai []*AI) int {
 func Play_Game(ai []*AI, state *State) int {
 	for i := 0; i < N; i++ {
 		ss := &bytes.Buffer{}
-		fmt.Fprintf(ss, "%d %d\n", len(state.F), len(state.F)*len(state.F-1)/2)
+		size := len(state.F)
+		fmt.Fprintf(ss, "%d %d\n", size, size*(size-1)/2)
 		for j := 0; j < len(state.F); j++ {
-			for k := j + 1; k < len(state.F); k++ {
+			for k := j + 1; k < size; k++ {
 				fmt.Fprintf(ss, "%d %d %d\n", j, k, state.F[j].l[k])
 			}
 		}
@@ -230,7 +231,7 @@ func Play_Game(ai []*AI, state *State) int {
 				//}
 				for idx, b := range state.B {
 					// TODO see above
-					fmt.Fprintf(ss, "%d BOMB %d %d %d %d %d", idx, color*b.owner, b.source, -1, -1, 0)
+					fmt.Fprintf(ss, "%d BOMB %d %d %d %d %d\n", idx, color*b.owner, b.source, -1, -1, 0)
 				}
 				ai[i].Feed_Inputs(ss)
 				M[i] = GetMove(ai[i], turn)
